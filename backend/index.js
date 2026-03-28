@@ -15,7 +15,13 @@ app.get("/", (req, res) => {
 
 // MySQL Connection
 // Replace your current connection logic with this:
-const db = mysql.createPool(process.env.DATABASE_URL);
+// Using a Pool is better for Vercel
+const db = mysql.createPool({
+  uri: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: true // This handles the SSL requirement for TiDB
+  }
+});
 
 // With a pool, you don't need db.connect(). 
 // It will connect automatically when a query is run.
