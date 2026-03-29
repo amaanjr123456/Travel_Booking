@@ -11,7 +11,7 @@
 
     <header>
         <div class="logo">
-            <div class="logo-icon"><img src="logo.jpg" alt="Logo"></div>
+            <div class="logo-icon"><img src="../logo.jpg" alt="Logo"></div>
             Travel Bliss
         </div>
         <div class="header-right">
@@ -21,67 +21,67 @@
 
     <main>
         <div class="stats-row">
-            <div class="stat-card all">
+            <div class="stat-card all" onclick="setFilter('all')">
                 <div class="stat-icon">🗂</div>
                 <div class="stat-label">Total</div>
                 <div class="stat-value" id="countAll">0</div>
             </div>
-            <div class="stat-card accepted">
+            <div class="stat-card accepted" onclick="setFilter('accepted')">
                 <div class="stat-icon">✅</div>
                 <div class="stat-label">Accepted</div>
                 <div class="stat-value" id="countAccepted">0</div>
             </div>
-            <div class="stat-card pending">
+            <div class="stat-card pending" onclick="setFilter('pending')">
                 <div class="stat-icon">⏳</div>
                 <div class="stat-label">Pending</div>
                 <div class="stat-value" id="countPending">0</div>
             </div>
-            <div class="stat-card declined">
+            <div class="stat-card declined" onclick="setFilter('declined')">
                 <div class="stat-icon">❌</div>
                 <div class="stat-label">Declined</div>
                 <div class="stat-value" id="countDeclined">0</div>
             </div>
         </div>
 
-       <div class="toolbar">
-    <div class="toolbar-left">
-        <span class="section-title">Bookings</span>
-        <div class="filters">
-            <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-            <button class="filter-btn" onclick="setFilter('accepted', this)">Accepted</button>
-            <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
-            <button class="filter-btn" onclick="setFilter('declined', this)">Declined</button>
-            
-
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <span class="section-title">Bookings</span>
+                <div class="filters">
+                    <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">All</button>
+                    <button class="filter-btn" id="filter-accepted" onclick="setFilter('accepted')">Accepted</button>
+                    <button class="filter-btn" id="filter-pending" onclick="setFilter('pending')">Pending</button>
+                    <button class="filter-btn" id="filter-declined" onclick="setFilter('declined')">Declined</button>
+                    <button class="filter-btn" onclick="fetchBookings()" title="Refresh">🔄</button>
+                </div>
             </div>
-    </div>
-    <div class="search-wrap">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-            <circle cx="9" cy="9" r="6"/><path d="M14 14l3 3"/>
-        </svg>
-        <input type="text" id="searchInput" placeholder="Search name or ID…">
-    </div>
-</div>
+            <div class="search-wrap">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                    <circle cx="9" cy="9" r="6"/><path d="M14 14l3 3"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search name or ID..." oninput="handleSearch()">
+            </div>
+        </div>
 
-        <div class="booking-list" id="bookingList"></div>
+        <div class="booking-list" id="bookingList">
+            </div>
     </main>
 
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
     <div class="drawer" id="drawer">
         <div class="drawer-header">
             <div>
                 <div class="drawer-avatar" id="dAvatar"></div>
-                <div class="drawer-name" id="dName"></div>
-                <div class="drawer-id" id="dId"></div>
+                <div class="drawer-name" id="dName">---</div>
+                <div class="drawer-id" id="dId">---</div>
             </div>
-            <button class="drawer-close" id="closeDrawerBtn">✕</button>
+            <button class="drawer-close" onclick="closeDrawer()">✕</button>
         </div>
 
         <div class="drawer-body">
             <div class="detail-section">
                 <div class="detail-section-title">Booking Details</div>
-                <div class="detail-grid" id="dGrid"></div>
+                <div class="detail-grid" id="dGrid">
+                    </div>
             </div>
 
             <div id="dNotesWrap" style="display:none">
@@ -97,25 +97,25 @@
             <div>
                 <div class="status-section-title">
                     <span>Update Status</span>
-                    <span id="dBadge"></span>
+                    <span id="dBadge" class="status-badge"></span>
                 </div>
                 <div class="status-btns">
-                    <button class="status-btn accept" id="btnAccept"><span class="btn-icon">✓</span>Accept</button>
-                    <button class="status-btn pending-btn" id="btnPending"><span class="btn-icon">⏳</span>Pending</button>
-                    <button class="status-btn decline" id="btnDecline"><span class="btn-icon">✕</span>Decline</button>
+                    <button class="status-btn accept" onclick="updateStatus('accepted')"><span class="btn-icon">✓</span>Accept</button>
+                    <button class="status-btn pending-btn" onclick="updateStatus('pending')"><span class="btn-icon">⏳</span>Pending</button>
+                    <button class="status-btn decline" onclick="updateStatus('declined')"><span class="btn-icon">✕</span>Decline</button>
                 </div>
             </div>
+
             <div class="danger-zone">
-    <div class="status-section-title">Danger Zone</div>
-    <button class="status-btn decline" id="btnDelete" style="width: 100%; border-color: #fdeaea; background: #fff5f5; color: #b03434;">
-        <span class="btn-icon">🗑</span> Delete Permanently
-    </button>
-</div>
+                <div class="status-section-title">Danger Zone</div>
+                <button class="status-btn decline" onclick="deleteBooking()" style="width: 100%; border-color: #fdeaea; background: #fff5f5; color: #b03434;">
+                    <span class="btn-icon">🗑</span> Delete Permanently
+                </button>
+            </div>
         </div>
     </div>
 
     <div id="toast"></div>
-
     <script src="adminscript.js"></script>
 </body>
 </html>
