@@ -42,9 +42,10 @@ document.getElementById('bookingform').addEventListener('submit', async (e) => {
     } else {
       alert("Error: " + result.message);
     }
-  } catch (error) {
+  } } catch (error) {
     console.error("Submission error:", error);
-    alert("Could not connect to the server. Make sure your backend is running on port 3000.");
+    alert("Server error. Please check the Vercel logs to see the database connection status.");
+  }
   }
 });
 
